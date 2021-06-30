@@ -1,11 +1,13 @@
 import requests
 import subprocess
-urls = ['http://google.com', 'https://bbc.co.uk']
-hosts = ["192.168.167.20","192.168.167.6"] 
+import socket
+urls = ['http://intranet/communications/home.asp', 'https://bbc.co.uk']
+ips = ["192.168.167.20","192.168.167.6"] 
 urlReached = []
 urlNotReached = []
 reached = []  
-not_reached = []     
+not_reached = []  
+reverse_dns = []   
 def request_test(sites):
     for url in urls:
         resp = requests.get(url)
@@ -15,19 +17,26 @@ def request_test(sites):
         else: 
             urlNotReached.append(url)
 
-def ping_test (host):
-    for ip in host:
+def ping_test (ips):
+    for ip in ips:
         ping_test = subprocess.call('ping %s -n 2' % ip)      
         if ping_test == 0:                   
             reached.append(ip)
         else:
             not_reached.append(ip)                             
 
-    print("{} is reachable".format(reached))
-    print("{} not reachable".format(not_reached))
-ping_test(hosts)
+def nslookup_test(hosts):
+    for ip in ips:
+        nslookuptest = socket.getfqdn(ip)
+        reverse_dns.append(nslookuptest)
+        
+
+ping_test(ips)
 request_test(urls)
+nslookup_test(ips)
+
 print("these urls were not accessable over http/https : " + str(urlNotReached))
 print("these urls were accessable over http/https : " + str(urlReached))
 print("these ips were accessable over ping : " + str(reached))
 print("these ips were not accessable over ping : " + str(not_reached))
+print("these DNS records were resolved from IP list : " + str(reverse_dns))
