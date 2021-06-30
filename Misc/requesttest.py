@@ -1,7 +1,7 @@
 import requests
 import subprocess
 import socket
-urls = ['http://intranet/communications/home.asp', 'https://bbc.co.uk']
+urls = ['intranet.com', 'https://bbc.co.uk']
 ips = ["192.168.167.20","192.168.167.6"] 
 urlReached = []
 urlNotReached = []
