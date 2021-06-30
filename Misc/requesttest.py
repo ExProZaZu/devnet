@@ -1,35 +1,39 @@
 import requests
 import subprocess
 import socket
-urls = ['intranet.com', 'https://bbc.co.uk']
-ips = ["192.168.167.20","192.168.167.6"] 
+urls = ['https://google.co.uk', 'https://bbc.co.uk']
+ips = ["192.168.167.20", "192.168.167.6"]
 urlReached = []
 urlNotReached = []
-reached = []  
-not_reached = []  
-reverse_dns = []   
+reached = []
+not_reached = []
+reverse_dns = []
+
+
 def request_test(sites):
     for url in urls:
         resp = requests.get(url)
         respcode = resp.status_code
         if respcode == 200:
             urlReached.append(url)
-        else: 
+        else:
             urlNotReached.append(url)
 
-def ping_test (ips):
+
+def ping_test(ips):
     for ip in ips:
-        ping_test = subprocess.call('ping %s -n 2' % ip)      
-        if ping_test == 0:                   
+        ping_test = subprocess.call('ping %s -n 2' % ip)
+        if ping_test == 0:
             reached.append(ip)
         else:
-            not_reached.append(ip)                             
+            not_reached.append(ip)
+
 
 def nslookup_test(hosts):
     for ip in ips:
         nslookuptest = socket.getfqdn(ip)
         reverse_dns.append(nslookuptest)
-        
+
 
 ping_test(ips)
 request_test(urls)
